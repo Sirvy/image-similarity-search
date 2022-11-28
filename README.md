@@ -6,4 +6,4 @@ Web application for simple image similarity retrieval based on color histograms 
 
 - PHP8, Nette
 - TypeScript, React
-- docker
+- Docker, MariaDB
