@@ -1,0 +1,14 @@
+application:
+	debugger: true
+
+parameters:
+
+
+database:
+	dsn: 'mysql:host=db_server:3306;dbname=testdb'
+	user: 'testuser'
+	password: 'testpass'
+
+security:
+	users:
+		admin: secret

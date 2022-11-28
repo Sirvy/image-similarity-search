@@ -1,0 +1,59 @@
+@use "assets/styles/vars";
+
+html, body {
+  padding: 0;
+  margin: 0;
+  background: vars.$main-color;
+  font: 100% vars.$main-font;
+}
+
+table {
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+}
+
+.bg-light {
+  background: vars.$main-color;
+}
+
+.bg-white {
+  background: #fff;
+}
+
+.table > :not(:first-child), .table td {
+  border: 0;
+}
+
+.histogram {
+  padding: 0;
+  margin: 0;
+}
+
+.histogram-canvases {
+  position: relative;
+  width: 50%;
+
+  canvas {
+    position: absolute;
+    height: 100%;
+    width: 90%;
+    padding: inherit;
+    top: 0;
+
+    &:last-child {
+      opacity: 0.5;
+    }
+
+    &:nth-child(2) {
+      opacity: 0.5;
+    }
+  }
+
+}

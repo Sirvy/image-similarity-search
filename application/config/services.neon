@@ -1,0 +1,10 @@
+services:
+	- App\Router\RouterFactory::createRouter
+
+	- App\Services\SaveImageService
+	- App\Services\ImageHistogramService
+	- App\Services\ComparatorService
+	- App\Services\HistogramNormalizer
+	- App\Services\ImageDbService
+
+	- App\Presenters\Api\Factory\HistogramDtoFactory
