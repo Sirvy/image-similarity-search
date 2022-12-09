@@ -1,6 +1,6 @@
 # image-similarity-search
 
-Web application for simple image similarity retrieval based on color histograms using Euclidean distance and Bhattacharyya coefficient on both RGB and YUV color models.
+Web application for simple image similarity retrieval based on color histograms using Euclidean distance,  Bhattacharyya coefficient and Cosine distance on both RGB and YUV color models.
 
 ![Example](docs/example1.png)
 
