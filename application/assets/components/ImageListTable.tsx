@@ -69,7 +69,7 @@ export default class ImageListTable extends React.Component<any, any> {
 
     render() {
         return (
-            <div className="table-responsive border bg-white rounded position-relative" style={{height: 700}}>
+            <div className="table-responsive border bg-white rounded position-relative" style={{height: 800}}>
                 <div id="image-list-loading"></div>
                 <table className="table">
                     <thead>

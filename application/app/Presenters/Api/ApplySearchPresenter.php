@@ -6,9 +6,8 @@ namespace App\Presenters\Api;
 
 use App\Presenters\Api\Factory\HistogramDtoFactory;
 use App\Services\ColorComparators\BhattacharyyaCoefficientComparator;
+use App\Services\ColorComparators\CosineDistanceComparator;
 use App\Services\ColorComparators\EuclideanDistanceComparator;
-use App\Services\ColorComparators\YUVBhattacharyyaCoefficientComparator;
-use App\Services\ColorComparators\YUVEuclideanDistanceComparator;
 use App\Services\ComparatorService;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
@@ -32,6 +31,7 @@ class ApplySearchPresenter extends AbstractApiPresenter
     {
         $sampleHistogram = $this->getRequest()->getPost('sampleHistogram');
         $comparatorKey = $this->getRequest()->getPost('comparator');
+        $colorModelKey = $this->getRequest()->getPost('colorModel');
         $colorRangeFrom = (int)$this->getRequest()->getPost('colorRangeFrom');
         $colorRangeTo = (int)$this->getRequest()->getPost('colorRangeTo');
 
@@ -47,12 +47,11 @@ class ApplySearchPresenter extends AbstractApiPresenter
 
         $comparator = match ($comparatorKey) {
             default => new EuclideanDistanceComparator(),
-            'euclidYUV' => new YUVEuclideanDistanceComparator(),
-            'bcRGB' => new BhattacharyyaCoefficientComparator(),
-            'bcYUV' => new YUVBhattacharyyaCoefficientComparator(),
+            'bc' => new BhattacharyyaCoefficientComparator(),
+            'cos' => new CosineDistanceComparator(),
         };
 
-        $result = $this->comparatorService->compareHistogramsAndReturnSortedList($comparator, $histogram, $colorRangeFrom, $colorRangeTo);
+        $result = $this->comparatorService->compareHistogramsAndReturnSortedList($comparator, $histogram, $colorRangeFrom, $colorRangeTo, $colorModelKey);
 
         $this->sendJson($result);
     }

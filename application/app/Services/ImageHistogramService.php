@@ -34,7 +34,7 @@ class ImageHistogramService
         return $histogram;
     }
 
-    // Full swing for YCbCr BT.601
+    // Full swing for YCbCr BT.601 (https://en.wikipedia.org/wiki/YUV#Full_swing_for_YCbCr_BT.601)
     private function rgbToYuv(int $red, int $green, int $blue): array
     {
         $yuvMatrix = [

@@ -18,6 +18,11 @@ class ImageDbService
     {
     }
 
+    public function count(): int
+    {
+        return $this->db->table(self::TABLE_NAME)->count();
+    }
+
     public function getAllImages(): array
     {
         return $this->db->table(self::TABLE_NAME)->fetchAll();

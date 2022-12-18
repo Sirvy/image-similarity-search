@@ -8,6 +8,7 @@ use App\Presenters\Api\Dto\HistogramDto;
 use App\Presenters\Api\Factory\HistogramDtoFactory;
 use App\Services\ColorComparators\ColorComparatorInterface;
 use App\Utils\ImageValueObject;
+use App\Utils\ThreeColorObject;
 
 class ComparatorService
 {
@@ -19,7 +20,13 @@ class ComparatorService
     {
     }
 
-    public function compareHistogramsAndReturnSortedList(ColorComparatorInterface $comparator, HistogramDto $histogram, int $colorRangeFrom, int $colorRangeTo): array
+    public function compareHistogramsAndReturnSortedList(
+        ColorComparatorInterface $comparator,
+        HistogramDto             $histogram,
+        int                      $colorRangeFrom,
+        int                      $colorRangeTo,
+        string                   $colorModel = 'RGB'
+    ): array
     {
         $images = $this->imageDbService->getAllImages();
 
@@ -27,8 +34,14 @@ class ComparatorService
         foreach ($images as $image) {
             $imageHistogram = $this->histogramDtoFactory->createFromJson($image->histogram);
             $compareValue = $comparator->compareHistograms(
-                $this->normalizer->normalizeHistogram($imageHistogram, $colorRangeFrom, $colorRangeTo),
-                $this->normalizer->normalizeHistogram($histogram, $colorRangeFrom, $colorRangeTo),
+                $this->getColorModelFromHistogram(
+                    $this->normalizer->normalizeHistogram($imageHistogram, $colorRangeFrom, $colorRangeTo),
+                    $colorModel
+                ),
+                $this->getColorModelFromHistogram(
+                    $this->normalizer->normalizeHistogram($histogram, $colorRangeFrom, $colorRangeTo),
+                    $colorModel
+                ),
                 $colorRangeFrom,
                 $colorRangeTo
             );
@@ -47,5 +60,13 @@ class ComparatorService
         }
 
         return $result;
+    }
+
+    private function getColorModelFromHistogram(HistogramDto $histogram, string $colorModel): ThreeColorObject
+    {
+        return match ($colorModel) {
+            'YUV' => new ThreeColorObject($histogram->y, $histogram->u, $histogram->v),
+            default => new ThreeColorObject($histogram->red, $histogram->green, $histogram->blue),
+        };
     }
 }

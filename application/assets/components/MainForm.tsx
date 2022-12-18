@@ -19,16 +19,24 @@ export default class MainForm extends React.Component<any, any> {
             },
             colorRangeFrom: 0,
             colorRangeTo: 255,
-            comparator: 'euclidRGB',
+            comparator: 'euclid',
+            colorModel: 'RGB',
         }
-        this.onValueChange = this.onValueChange.bind(this);
+        this.onComparatorValueChange = this.onComparatorValueChange.bind(this);
+        this.onColorModelValueChange = this.onColorModelValueChange.bind(this);
         this.onApplySearch = this.onApplySearch.bind(this);
         this.updateSampleHistogram = this.updateSampleHistogram.bind(this);
     }
 
-    onValueChange(event: React.ChangeEvent<HTMLInputElement>) {
+    onComparatorValueChange(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({
             comparator: event.currentTarget.value
+        });
+    }
+
+    onColorModelValueChange(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            colorModel: event.currentTarget.value
         });
     }
 
@@ -58,6 +66,7 @@ export default class MainForm extends React.Component<any, any> {
         const formData = new FormData();
         formData.append('sampleHistogram', JSON.stringify(this.state.sampleHistogram))
         formData.append('comparator', this.state.comparator)
+        formData.append('colorModel', this.state.colorModel)
         formData.append('colorRangeFrom', this.state.colorRangeFrom)
         formData.append('colorRangeTo', this.state.colorRangeTo)
 
@@ -65,6 +74,7 @@ export default class MainForm extends React.Component<any, any> {
             if (Array.isArray(r.data)) {
                 refreshTable(r.data)
             }
+            console.log(r.data);
         }).catch((e) => {
             alert(`ERROR while applying algorithm.`);
             console.log(e);
@@ -81,37 +91,48 @@ export default class MainForm extends React.Component<any, any> {
                     <SamplePreviewForm updateSampleHistogram={this.updateSampleHistogram}/>
                 </div>
                 <div className="mb-3">
+                    <p>Color model</p>
+                </div>
+                <div className="mb-3">
+                    <div className="form-check form-check-inline">
+                        <input className="form-check-input mt-0" type="radio" name="colorModel" id="RGB" value="RGB"
+                               checked={this.state.colorModel === 'RGB'} onChange={this.onColorModelValueChange}/>
+                        <label className="form-check-label" htmlFor="RGB">
+                            RGB
+                        </label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input className="form-check-input mt-0" type="radio" name="colorModel" id="YUV" value="YUV"
+                               checked={this.state.colorModel === 'YUV'} onChange={this.onColorModelValueChange}/>
+                        <label className="form-check-label" htmlFor="YUV">
+                            YUV
+                        </label>
+                    </div>
+                </div>
+                <div className="mb-3">
                     <p>Similarity function</p>
                 </div>
                 <div className="mb-3">
                     <div className="form-check">
-                        <input className="form-check-input mt-0" type="radio" name="algorithm" id="euclidRGB"
-                               value="euclidRGB"
-                               checked={this.state.comparator === 'euclidRGB'} onChange={this.onValueChange}/>
-                        <label className="form-check-label" htmlFor="euclidRGB">
-                            Euclidean Distance RGB
+                        <input className="form-check-input mt-0" type="radio" name="algorithm" id="euclid"
+                               value="euclid"
+                               checked={this.state.comparator === 'euclid'} onChange={this.onComparatorValueChange}/>
+                        <label className="form-check-label" htmlFor="euclid">
+                            Euclidean Distance
                         </label>
                     </div>
                     <div className="form-check">
-                        <input className="form-check-input mt-0" type="radio" name="algorithm" id="euclidYUV"
-                               value="euclidYUV"
-                               checked={this.state.comparator === 'euclidYUV'} onChange={this.onValueChange}/>
-                        <label className="form-check-label" htmlFor="euclidYUV">
-                            Euclidean Distance YUV
+                        <input className="form-check-input mt-0" type="radio" name="algorithm" id="bc" value="bc"
+                               checked={this.state.comparator === 'bc'} onChange={this.onComparatorValueChange}/>
+                        <label className="form-check-label" htmlFor="bc">
+                            Bhattacharyya Distance
                         </label>
                     </div>
                     <div className="form-check">
-                        <input className="form-check-input mt-0" type="radio" name="algorithm" id="bcRGB" value="bcRGB"
-                               checked={this.state.comparator === 'bcRGB'} onChange={this.onValueChange}/>
-                        <label className="form-check-label" htmlFor="bcRGB">
-                            Bhattacharyya Distance RGB
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <input className="form-check-input mt-0" type="radio" name="algorithm" id="bcYUV" value="bcYUV"
-                               checked={this.state.comparator === 'bcYUV'} onChange={this.onValueChange}/>
-                        <label className="form-check-label" htmlFor="bcYUV">
-                            Bhattacharyya Distance YUV
+                        <input className="form-check-input mt-0" type="radio" name="algorithm" id="cos" value="cos"
+                               checked={this.state.comparator === 'cos'} onChange={this.onComparatorValueChange}/>
+                        <label className="form-check-label" htmlFor="cos">
+                            Cosine Distance
                         </label>
                     </div>
                 </div>

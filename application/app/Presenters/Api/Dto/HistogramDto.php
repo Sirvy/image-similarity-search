@@ -36,5 +36,4 @@ class HistogramDto
         $this->v = $v;
     }
 
-
 }

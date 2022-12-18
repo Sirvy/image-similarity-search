@@ -7,9 +7,9 @@ export default class ImageList extends React.Component<any, any> {
         return (
             <div>
                 <div className="mb-3">
-                    <ImageListFileUpload />
+                    <ImageListFileUpload/>
                 </div>
-                <ImageListTable />
+                <ImageListTable/>
             </div>
         );
     }

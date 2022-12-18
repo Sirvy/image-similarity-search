@@ -11,6 +11,7 @@ use App\Services\SaveImageService;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use Nette\Application\AbortException;
+use Nette\Utils\FileSystem;
 use Nette\Utils\ImageException;
 use Nette\Utils\UnknownImageFileException;
 
@@ -35,6 +36,10 @@ class ImagesPresenter extends AbstractApiPresenter
 
         if (count($files) < 1) {
             throw new Exception('No File');
+        }
+
+        if ($this->imageDbService->count() > 500) {
+            throw new Exception('There are too many images in the database already. Please reset.');
         }
 
         $savedImages = [];
@@ -70,6 +75,8 @@ class ImagesPresenter extends AbstractApiPresenter
     #[NoReturn] protected function handleDelete()
     {
         $this->imageDbService->deleteAll();
+        FileSystem::delete('./files/');
+        FileSystem::createDir('files');
         $this->sendJson('All images deleted');
     }
 
